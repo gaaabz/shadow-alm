@@ -1,234 +1,250 @@
-# Shadow DEX Automated Liquidity Manager (ALM)
+# Shadow ALM - DeFi Automated Liquidity Manager
 
-An automated liquidity management system for Shadow DEX on the Sonic network that maintains liquidity in the narrowest possible range (single tick) to maximize SHADOW token emissions.
+**A production-ready automated liquidity management system for Uniswap V3 concentrated liquidity on Sonic Labs blockchain.**
 
-## Overview
+## 🚀 Live Application
 
-The Shadow ALM automatically manages concentrated liquidity positions on Shadow DEX by:
-- Keeping liquidity exactly in the active tick only
-- Automatically rebalancing when price moves outside the current range
-- Maximizing SHADOW token emissions through optimal positioning
-- Providing a user-friendly interface for deposits and withdrawals
+**Frontend deployed**: [Your Vercel URL]
+**Contract deployed**: `0xc5287E76a345DBeFe6F250512A637dc0c349dCc6` (Sonic Labs)
 
-## Architecture
+## 📋 Overview
 
-### Smart Contract (`ShadowALM.sol`)
-- **Non-custodial**: Users maintain ownership through share tokens
-- **Automated rebalancing**: Triggered by executor service
-- **Fee collection**: Automatic collection and distribution of trading fees
-- **Emergency controls**: Pause functionality and access controls
+Shadow ALM is a **fully functional DeFi protocol** that enables users to deposit liquidity into Uniswap V3 positions and receive automated rebalancing for optimal capital efficiency. Built specifically for **Sonic Labs** blockchain with complete integration to **USDC/scUSD pool**.
 
-### TypeScript Executor Service
-- **Price monitoring**: Continuous monitoring of pool tick changes
-- **Rebalance triggers**: Automatic position adjustments
-- **Gas optimization**: Efficient transaction execution
-- **REST API**: Interface for frontend and monitoring
+### ✨ Key Features
 
-### React Frontend
-- **Wallet integration**: MetaMask connection with Sonic network support
-- **Position management**: Deposit/withdraw interface
-- **Real-time metrics**: Pool and position monitoring
-- **Transaction history**: Complete transaction tracking
+🔄 **Automated Rebalancing**: Manual trigger system for position optimization  
+💰 **Fee Collection**: Automatic trading fee distribution to liquidity providers  
+🛡️ **Non-Custodial Security**: Users maintain full control through ERC20 share tokens  
+📱 **Production Frontend**: Deployed React app with Web3 wallet integration  
+⛽ **Gas Optimized**: Foundry-compiled contracts with minimal gas usage  
+🎯 **Real Pool Integration**: Connected to live USDC/scUSD Uniswap V3 pool  
 
-## Target Pool
+## 🏗️ Architecture
 
-- **Address**: `0x2c13383855377faf5a562f1aef47e4be7a0f12ac`
-- **Network**: Sonic (Chain ID: 146)
-- **Strategy**: Single-tick concentrated liquidity
+### Smart Contract (`ShadowALMCompatible.sol`)
+- **Deployed**: `0xc5287E76a345DBeFe6F250512A637dc0c349dCc6`
+- **Pool**: `0xDFCDAD314b0b96AB8890391e3F0540278E3B80F7` (USDC/scUSD, fee 100)
+- **Factory**: Official Uniswap V3 factory (fully compatible)
+- **Position Manager**: `0x743E03cceB4af2efA3CC76838f6E8B50B63F184c`
 
-## Installation & Setup
+### Frontend (React + TypeScript)
+- **Framework**: React 19 + Vite + Tailwind CSS v4
+- **Web3**: Wagmi v2 + Viem for blockchain interaction
+- **Deployment**: Vercel with automatic builds
+- **Features**: Real-time data, transaction history, position management
+
+### Manual Executor System
+- **No Backend Required**: Frontend-only deployment
+- **Manual Rebalancing**: Users can trigger rebalance from UI
+- **Gas Estimation**: Real-time gas cost calculation
+- **Security**: Only authorized executor can rebalance
+
+## 🛠️ Installation & Setup
 
 ### Prerequisites
-- Node.js 18+
-- npm or yarn
-- MetaMask wallet
-- Sonic network RPC access
+- **Node.js 18+** and **pnpm**
+- **MetaMask wallet** with Sonic Labs network added
+- **WalletConnect Project ID** ([Get from here](https://cloud.walletconnect.com))
 
-### 1. Install Dependencies
+### 1. Clone and Install
 
 ```bash
-# Root dependencies
-npm install
-
-# Backend dependencies
-cd backend && npm install
-
-# Frontend dependencies
-cd ../frontend && npm install
+git clone [your-repo-url]
+cd shadow-alm/frontend
+pnpm install
 ```
 
 ### 2. Environment Configuration
 
-Create `.env` file in the root directory:
+Create `.env.local` in `frontend/` directory:
 
 ```env
-PRIVATE_KEY=your_private_key_here
-SONICSCAN_API_KEY=your_sonicscan_api_key_here
-RPC_URL=https://rpc.soniclabs.com
-SHADOW_POOL_ADDRESS=0x2c13383855377faf5a562f1aef47e4be7a0f12ac
-ALM_CONTRACT_ADDRESS=your_deployed_alm_address
+VITE_WALLETCONNECT_PROJECT_ID=your_project_id_here
 ```
 
-### 3. Compile Contracts
+### 3. Development Server
 
 ```bash
-npx hardhat compile
+cd shadow-alm/frontend
+pnpm run dev
 ```
 
-### 4. Deploy Contracts
+### 4. Production Build
 
 ```bash
-# Deploy to Sonic network
-npx hardhat run scripts/deploy.ts --network sonic
+pnpm run build
+pnpm run preview
 ```
 
-### 5. Start Services
+## 🚀 Deployment (Vercel)
 
+### Prerequisites
+- GitHub repository with your code
+- Vercel account connected to GitHub
+
+### Steps
+1. **Import project** in Vercel from GitHub
+2. **Set Root Directory** to `frontend`
+3. **Add Environment Variable**: `VITE_WALLETCONNECT_PROJECT_ID`
+4. **Deploy** (Vercel auto-detects Vite config)
+
+### Build Settings
+- **Build Command**: `pnpm run build`
+- **Output Directory**: `dist`
+- **Node.js Version**: 18.x
+
+## 📱 How to Use
+
+### 🔌 Connect Wallet
+1. Visit the deployed application
+2. Click **"Connect Wallet"**
+3. Select **MetaMask** or **WalletConnect**
+4. Approve Sonic Labs network addition (Chain ID: 146)
+
+### 💰 Deposit Liquidity
+1. Navigate to **"Deposit"** tab
+2. Enter amounts for **USDC** and **scUSD**
+3. **Approve tokens** if first time (2 transactions)
+4. Click **"Deposit"** to receive ALM shares
+5. View your position in **"Pool Metrics"**
+
+### 📊 Monitor Position
+- **Current Tick**: Live price position
+- **Token Holdings**: Your USDC/scUSD amounts
+- **Price Range**: Active liquidity range
+- **Total Liquidity**: Pool's total liquidity in USD
+
+### 🔄 Rebalance Position
+1. **Executor Panel** appears only for authorized address
+2. Click **"Rebalance Position"** to optimize range
+3. Confirm transaction in wallet
+4. Position automatically updates to current price
+
+### 💸 Withdraw Liquidity  
+1. Navigate to **"Withdraw"** tab
+2. Enter **share amount** to withdraw
+3. Click **"Withdraw"** to receive proportional tokens
+4. Confirm transaction in wallet
+
+### 📈 Transaction History
+- View all **deposits**, **withdrawals**, and **rebalances**
+- Filter by **recent** or **all history**  
+- Toggle **"Show all users"** to see protocol activity
+- Click transaction hash to view on **Sonicscan**
+
+## 🔧 Technical Implementation
+
+### Smart Contract Architecture
+
+**`ShadowALMCompatible.sol`** - Main ALM contract:
+```solidity
+// Core functions
+function deposit(uint256 amount0, uint256 amount1) external returns (uint256 shares)
+function withdraw(uint256 shares) external returns (uint256 amount0, uint256 amount1)  
+function rebalance() external onlyExecutor
+function collectFees() external onlyExecutor
+function getPosition() external view returns (int24, int24, uint128, uint256, uint256)
+```
+
+### Frontend Technology Stack
+
+- **React 19** + **TypeScript** for type safety
+- **Tailwind CSS v4** for modern styling  
+- **Wagmi v2** + **Viem** for Web3 integration
+- **@tanstack/react-query** for data fetching
+- **Vite** for fast development and building
+
+### Key Components
+- **`DepositWithdraw.tsx`**: Token approval and liquidity management
+- **`PoolMetrics.tsx`**: Real-time pool and position data
+- **`ExecutorPanel.tsx`**: Rebalancing controls (executor only)
+- **`TransactionHistory.tsx`**: Complete transaction tracking
+- **`WalletConnect.tsx`**: Web3 wallet integration
+
+## 🛡️ Security & Architecture
+
+### Non-Custodial Design
+✅ **Users own ALM ERC20 shares** representing pool ownership  
+✅ **No private keys stored** - all transactions via user wallets  
+✅ **Transparent smart contract** - all code verifiable on Sonicscan  
+✅ **Emergency pause** functionality for critical issues  
+
+### Access Control
+- **Owner**: Can set executor, pause contract, collect performance fees
+- **Executor**: Can trigger rebalance and fee collection only  
+- **Users**: Can deposit, withdraw, and view positions anytime
+
+### Risk Management
+⚠️ **Impermanent Loss**: Concentrated liquidity amplifies IL risk  
+⚠️ **Gas Costs**: Rebalancing requires gas fees  
+⚠️ **Smart Contract Risk**: Unaudited code - use at own risk  
+⚠️ **Executor Dependency**: Manual rebalancing required for optimization  
+
+## 🔍 Contract Verification
+
+**Sonic Labs Explorer**: https://sonicscan.org/address/0xc5287E76a345DBeFe6F250512A637dc0c349dCc6
+
+- **Compiler**: Foundry (Solidity 0.8.20)
+- **Optimization**: Enabled (200 runs)
+- **Libraries**: OpenZeppelin v5 contracts
+- **Verification**: Source code available on Sonicscan
+
+## 📊 Live Pool Data
+
+- **Pool Address**: `0xDFCDAD314b0b96AB8890391e3F0540278E3B80F7`
+- **Tokens**: USDC (6 decimals) / scUSD (6 decimals)  
+- **Fee Tier**: 0.01% (100 basis points)
+- **Tick Spacing**: 1 (allows precise positioning)
+- **Factory**: Official Uniswap V3 factory on Sonic Labs
+
+## 🚀 Deployment History
+
+1. **Initial Development**: Pool fee 95 (incompatible with Position Manager)
+2. **Compatibility Fix**: Migrated to pool fee 100 for full Uniswap V3 support
+3. **Gas Optimization**: Foundry compilation reduces deployment costs
+4. **Frontend Deployment**: Vercel hosting with automatic builds
+5. **Production Ready**: Live on Sonic Labs with real USDC/scUSD pool
+
+## 🤝 Contributing
+
+### Development Setup
 ```bash
-# Start backend executor service
-npm run backend
+# Clone repository
+git clone [your-repo-url]
+cd shadow-alm
 
-# Start frontend (in separate terminal)
-npm run frontend
+# Install dependencies  
+cd frontend && pnpm install
 
-# Or start both concurrently
-npm run dev
+# Run development server
+pnpm run dev
 ```
 
-## Usage
-
-### For Liquidity Providers
-
-1. **Connect Wallet**: Connect MetaMask to Sonic network
-2. **Deposit Liquidity**: Provide Token0 and Token1 to receive ALM shares
-3. **Monitor Position**: View real-time position and performance metrics
-4. **Withdraw**: Burn ALM shares to receive proportional liquidity back
-
-### For Operators
-
-1. **Monitor Service**: Check executor service health at `/health`
-2. **Manual Rebalance**: Force rebalance via `/rebalance` endpoint
-3. **Collect Fees**: Trigger fee collection via `/collect-fees` endpoint
-
-## API Endpoints
-
-### Executor Service (Port 3001)
-
-- `GET /health` - Service health check
-- `GET /position` - Current position information
-- `GET /pool` - Pool metrics and data
-- `POST /rebalance` - Manual rebalance trigger
-- `POST /collect-fees` - Collect trading fees
-
-## Smart Contract Functions
-
-### User Functions
-- `deposit(uint256 amount0, uint256 amount1)` - Deposit liquidity
-- `withdraw(uint256 shares)` - Withdraw liquidity
-- `getPosition()` - View current position
-
-### Executor Functions
-- `rebalance()` - Rebalance to current tick
-- `collectFees()` - Collect and distribute fees
-
-### Admin Functions
-- `setExecutor(address)` - Update executor address
-- `setPerformanceFee(uint256)` - Update performance fee
-- `pause() / unpause()` - Emergency controls
-
-## Configuration
-
-### Rebalancing Parameters
-- **Minimum Interval**: 60 seconds between rebalances
-- **Tick Range**: Single tick spacing (narrowest possible)
-- **Gas Buffer**: 50,000 gas units added to estimates
-
-### Performance Fees
-- **Default**: 10% of collected trading fees
-- **Maximum**: 20% (hardcoded limit)
-- **Distribution**: Sent to contract owner
-
-## Security Features
-
-- **Non-custodial design**: Users maintain token ownership
-- **Access controls**: Executor and admin roles
-- **Emergency pause**: Stop operations if needed
-- **Gas estimation**: Prevent failed transactions
-- **Input validation**: Comprehensive parameter checking
-
-## Monitoring & Alerts
-
-The executor service provides comprehensive logging and monitoring:
-
-- **Price changes**: Logged when tick changes detected
-- **Rebalance events**: Complete transaction details
-- **Error handling**: Detailed error logging and recovery
-- **Health checks**: Service status and connectivity
-
-## Deployment Guide
-
-### 1. Sonic Network Setup
-- Add Sonic network to MetaMask
-- Fund deployer account with S tokens
-- Verify RPC connectivity
-
-### 2. Contract Deployment
-- Update hardhat.config.ts with correct parameters
-- Deploy ShadowALM contract
-- Verify on Sonicscan (optional)
-
-### 3. Service Configuration
-- Update environment variables
-- Start executor service
-- Verify pool monitoring
-
-### 4. Frontend Deployment
-- Build React application
-- Deploy to hosting platform
-- Configure API endpoints
-
-## Risk Considerations
-
-- **Impermanent Loss**: Single-tick positions have higher IL risk
-- **Gas Costs**: Frequent rebalancing incurs gas fees
-- **Smart Contract Risk**: Audit recommended before mainnet
-- **Executor Risk**: Service availability critical for rebalancing
-
-## Development
-
-### Testing
+### Contract Development
 ```bash
-# Run contract tests
-npx hardhat test
+# Compile contracts (Foundry required)
+forge build
 
-# Run backend tests
-cd backend && npm test
+# Run tests
+forge test
 
-# Run frontend tests
-cd frontend && npm test
+# Deploy to Sonic Labs
+forge script script/Deploy.s.sol --rpc-url https://rpc.sonic.technology --broadcast
 ```
 
-### Local Development
-```bash
-# Start local hardhat node
-npx hardhat node
+## 📄 License
 
-# Deploy to local network
-npx hardhat run scripts/deploy.ts --network localhost
-```
+**MIT License** - Open source DeFi protocol
 
-## Support
+## ⚠️ Disclaimer
 
-For issues and questions:
-- Check the logs in `backend/logs/`
-- Verify network connectivity
-- Ensure correct environment variables
-- Monitor transaction status on Sonicscan
+**This is experimental DeFi software deployed on Sonic Labs testnet/mainnet. Use at your own risk.**
 
-## License
+- 🔍 **Unaudited smart contracts** - no security audit completed
+- 💰 **Financial risk** - potential loss of deposited funds  
+- ⛽ **Gas costs** - transaction fees required for all operations
+- 📈 **Impermanent loss** - concentrated liquidity increases IL risk
+- 🔧 **Beta software** - bugs and issues may exist
 
-MIT License - See LICENSE file for details.
-
----
-
-**Disclaimer**: This is experimental software. Use at your own risk. Automated liquidity management involves financial risk and smart contract risk. Consider auditing before production use.
+**Always test with small amounts first and understand the risks before depositing significant funds.**
