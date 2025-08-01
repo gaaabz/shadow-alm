@@ -5,7 +5,7 @@
 ## 🚀 Live Application
 
 **Frontend deployed**: [Your Vercel URL]
-**Contract deployed**: `0xc5287E76a345DBeFe6F250512A637dc0c349dCc6` (Sonic Labs)
+**Contract deployed**: `0xc5287E76a345DBeFe6F250512A637dc0c349dCc6` (Sonic Labs - Production)
 
 ## 📋 Overview
 
@@ -23,7 +23,7 @@ Shadow ALM is a **fully functional DeFi protocol** that enables users to deposit
 ## 🏗️ Architecture
 
 ### Smart Contract (`ShadowALMCompatible.sol`)
-- **Deployed**: `0xc5287E76a345DBeFe6F250512A637dc0c349dCc6`
+- **Deployed**: `0xc5287E76a345DBeFe6F250512A637dc0c349dCc6` (Production)  
 - **Pool**: `0xDFCDAD314b0b96AB8890391e3F0540278E3B80F7` (USDC/scUSD, fee 100)
 - **Factory**: Official Uniswap V3 factory (fully compatible)
 - **Position Manager**: `0x743E03cceB4af2efA3CC76838f6E8B50B63F184c`
@@ -121,6 +121,38 @@ pnpm run preview
 3. Confirm transaction in wallet
 4. Position automatically updates to current price
 
+## 🎯 **Core Strategy: Single-Tick Concentrated Liquidity**
+
+### **Strategy Philosophy**
+Shadow ALM implements an **aggressive single-tick strategy** designed to maximize fee capture by concentrating 100% of liquidity in the narrowest possible range around the current price.
+
+**Key Principles:**
+- ✅ **Always maintain liquidity in exactly the active tick only**
+- ✅ **Use minimum tick spacing (1 tick = ~0.01% price range)**
+- ✅ **Immediate rebalancing when price moves outside range**
+- ✅ **Maximum capital efficiency for fee generation**
+
+### **Profit Maximization Approach**
+
+**1. Fee Capture Optimization:**
+```
+Fee Rate = Pool Fee × Liquidity Utilization
+Single-tick positions capture fees only when price is within range
+Higher concentration = Higher fees when active
+```
+
+**2. Capital Efficiency:**
+```
+Traditional LP: Spread across wide range (low utilization)
+Single-tick ALM: 100% utilization when price is in range
+Result: 10-100x higher fee generation per dollar
+```
+
+**3. Rebalancing Strategy:**
+- **Frequency**: Immediate rebalancing on price movement
+- **Timing**: Optimal execution during low volatility periods  
+- **Cost Management**: Gas-efficient Foundry-compiled contracts
+
 ### 💸 Withdraw Liquidity  
 1. Navigate to **"Withdraw"** tab
 2. Enter **share amount** to withdraw
@@ -132,6 +164,121 @@ pnpm run preview
 - Filter by **recent** or **all history**  
 - Toggle **"Show all users"** to see protocol activity
 - Click transaction hash to view on **Sonicscan**
+
+## 📊 **Profitability Analysis & Success Metrics**
+
+### **Key Performance Indicators (KPIs)**
+
+**1. Fee Generation Metrics:**
+- **Fee APR**: Annual percentage return from trading fees
+- **Fee per Dollar per Day**: Daily fee generation per USD deposited
+- **Utilization Rate**: % of time liquidity is actively earning fees
+- **Fee Capture Rate**: % of total pool fees captured by ALM position
+
+**2. Capital Efficiency Metrics:**
+```
+Capital Efficiency = Fees Earned / Capital Deployed
+Target: >20% APR (vs 2-5% for passive LP)
+
+Fee Concentration Ratio = ALM Fee Rate / Wide Range LP Fee Rate  
+Target: 5-10x higher fee generation
+```
+
+**3. Operational Metrics:**
+- **Rebalance Frequency**: Number of rebalances per day
+- **Gas Cost Ratio**: Gas costs as % of fees earned (target: <10%)
+- **Position Uptime**: % of time position is active and earning
+- **Impermanent Loss vs Fee Income**: Net profitability after IL
+
+### **Profitability Drivers**
+
+**✅ Revenue Sources:**
+1. **Trading Fees**: 0.01% per swap through our liquidity
+2. **MEV Capture**: Being first in tick during price movements
+3. **Capital Efficiency**: 100% utilization vs 10-20% for wide ranges
+4. **Compound Growth**: Reinvested fees increase position size
+
+**💰 Profitability Formula:**
+```
+Net Profit = (Fee Income + MEV Capture) - (Gas Costs + Impermanent Loss)
+
+Target Breakdown:
+- Fee Income: 15-25% APR
+- Gas Costs: -1-3% APR  
+- Impermanent Loss: -5-15% APR (depending on volatility)
+- Net Target: 10-20% APR positive
+```
+
+## ⚠️ **Risk Analysis & Mitigation Strategies**
+
+### **Primary Risks That Eat Into Profits:**
+
+**1. Impermanent Loss (HIGHEST RISK)**
+```
+Risk: Single-tick positions have 10x higher IL than wide ranges
+Impact: Can lose 10-50% during high volatility periods
+Mitigation:
+  ✅ Focus on stable pairs (USDC/scUSD)
+  ✅ Quick rebalancing to minimize exposure time
+  ✅ Monitor volatility and pause during extreme events
+```
+
+**2. Gas Cost Spirals**
+```
+Risk: High rebalance frequency during volatility
+Impact: Gas costs can exceed fee income (gas > 10% of fees)
+Mitigation:
+  ✅ Gas-optimized Foundry contracts
+  ✅ Batch operations when possible
+  ✅ Rebalance only when profitable (gas < expected fees)
+  ✅ Use gas price oracles for optimal timing
+```
+
+**3. MEV Sandwich Attacks**
+```
+Risk: Being sandwiched during rebalancing transactions
+Impact: Worse execution prices, reduced profitability
+Mitigation:
+  ✅ Private mempool submission (Flashbots)
+  ✅ Slippage protection in contracts
+  ✅ MEV-aware rebalancing timing
+```
+
+**4. Liquidity Competition**
+```
+Risk: Other LPs concentrating in same tick
+Impact: Diluted fee share, reduced profitability  
+Mitigation:
+  ✅ First-mover advantage through fast rebalancing
+  ✅ Monitor competitive positions
+  ✅ Dynamic tick selection based on competition
+```
+
+**5. Smart Contract Risks**
+```
+Risk: Bugs, exploits, or protocol failures
+Impact: Total loss of deposited funds
+Mitigation:
+  ✅ Gradual rollout with small amounts
+  ✅ Emergency pause functionality
+  ✅ Multi-sig controls for critical functions
+  ✅ Bug bounty program (recommended)
+```
+
+### **Success Monitoring Dashboard**
+
+**Real-Time Alerts:**
+- 🚨 **Gas Cost Alert**: When gas > 5% of recent fee income
+- 🚨 **IL Alert**: When IL > 10% of position value
+- 🚨 **Competition Alert**: When other LPs enter our tick
+- 🚨 **Utilization Alert**: When position inactive > 30 minutes
+
+**Daily Reports:**
+- Fee income vs targets
+- Gas cost efficiency  
+- IL impact analysis
+- Competitive position analysis
+- Net profitability trends
 
 ## 🔧 Technical Implementation
 

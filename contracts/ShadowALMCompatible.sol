@@ -38,7 +38,7 @@ contract ShadowALMCompatible is ERC20, ReentrancyGuard, Ownable, Pausable {
     
     event Deposit(address indexed user, uint256 shares, uint256 amount0, uint256 amount1);
     event Withdraw(address indexed user, uint256 shares, uint256 amount0, uint256 amount1);
-    event Rebalance(int24 newTickLower, int24 newTickUpper, uint256 liquidity);
+    event Rebalance(int24 tickLower, int24 tickUpper, uint256 timestamp);
     event FeesCollected(uint256 amount0, uint256 amount1);
     event ExecutorUpdated(address indexed newExecutor);
     event PositionCreated(uint256 indexed tokenId, int24 tickLower, int24 tickUpper, uint256 amount0, uint256 amount1);
@@ -131,9 +131,11 @@ contract ShadowALMCompatible is ERC20, ReentrancyGuard, Ownable, Pausable {
     function rebalance() external onlyExecutor {
         (, int24 currentTick, , , , , ) = pool.slot0();
         
+        // SINGLE-TICK STRATEGY: Keep liquidity in exactly the active tick only
         // Use OFFICIAL tick spacing of 1 (fee 100 pool)
-        int24 tickLower = (currentTick / tickSpacing) * tickSpacing;
-        int24 tickUpper = tickLower + tickSpacing;
+        int24 activeTick = (currentTick / tickSpacing) * tickSpacing;
+        int24 tickLower = activeTick;
+        int24 tickUpper = activeTick; // Single-tick: both ticks are the same
         
         if (tickLower == currentTickLower && tickUpper == currentTickUpper && currentPositionId != 0) {
             return;
@@ -145,7 +147,7 @@ contract ShadowALMCompatible is ERC20, ReentrancyGuard, Ownable, Pausable {
         
         _addLiquidity(tickLower, tickUpper);
         
-        emit Rebalance(tickLower, tickUpper, 0);
+        emit Rebalance(tickLower, tickUpper, block.timestamp);
     }
     
     function _addLiquidity(int24 tickLower, int24 tickUpper) internal {
