@@ -4,6 +4,7 @@ import PoolMetrics from './PoolMetrics'
 import PositionInfo from './PositionInfo'
 import DepositWithdraw from './DepositWithdraw'
 import TransactionHistory from './TransactionHistory'
+import ExecutorPanel from './ExecutorPanel'
 
 export default function Dashboard() {
   const { isConnected } = useAccount()
@@ -27,6 +28,8 @@ export default function Dashboard() {
               <h2 className="text-2xl font-semibold text-white mb-6">Transaction History</h2>
               <TransactionHistory />
             </div>
+
+            <ExecutorPanel />
           </div>
 
           {/* Right Column - Position & Actions */}
