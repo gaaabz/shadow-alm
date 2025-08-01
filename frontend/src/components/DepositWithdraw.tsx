@@ -65,14 +65,6 @@ export default function DepositWithdraw() {
     functionName: "token1",
   });
 
-  // Get token info - token name not used but kept for future reference
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  const { data: token0Name } = useReadContract({
-    address: token0Address,
-    abi: ERC20_ABI,
-    functionName: "name",
-  });
-
   const { data: token0Symbol } = useReadContract({
     address: token0Address,
     abi: ERC20_ABI,
@@ -83,13 +75,6 @@ export default function DepositWithdraw() {
     address: token0Address,
     abi: ERC20_ABI,
     functionName: "decimals",
-  });
-
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  const { data: token1Name } = useReadContract({
-    address: token1Address,
-    abi: ERC20_ABI,
-    functionName: "name",
   });
 
   const { data: token1Symbol } = useReadContract({
@@ -304,7 +289,7 @@ export default function DepositWithdraw() {
   };
 
   const handleDeposit = async () => {
-    if (!address || !amount0 || !amount1) return;
+    if (!address || !amount0.trim() || !amount1.trim()) return;
 
     setError(null);
     setSuccess(null);
@@ -329,7 +314,7 @@ export default function DepositWithdraw() {
   };
 
   const handleWithdraw = async () => {
-    if (!address || !shares) return;
+    if (!address || !shares.trim()) return;
 
     setError(null);
     setSuccess(null);
@@ -508,10 +493,10 @@ export default function DepositWithdraw() {
                 isLoading ||
                 !amount0.trim() ||
                 !amount1.trim() ||
-                needsToken0Approval ||
-                needsToken1Approval ||
-                hasInsufficientToken0Balance ||
-                hasInsufficientToken1Balance
+                !!needsToken0Approval ||
+                !!needsToken1Approval ||
+                !!hasInsufficientToken0Balance ||
+                !!hasInsufficientToken1Balance
               }
               className="w-full bg-blue-600 text-white py-3 px-4 rounded-lg hover:bg-blue-700 disabled:bg-gray-600 disabled:cursor-not-allowed flex items-center justify-center transition-colors"
             >
@@ -578,7 +563,7 @@ export default function DepositWithdraw() {
           <div>
             <button
               onClick={handleWithdraw}
-              disabled={isLoading || !shares.trim() || hasInsufficientShares}
+              disabled={isLoading || !shares.trim() || !!hasInsufficientShares}
               className="w-full bg-purple-600 text-white py-3 px-4 rounded-lg hover:bg-purple-700 disabled:bg-gray-600 disabled:cursor-not-allowed flex items-center justify-center transition-colors"
             >
               {isLoading ? (

@@ -29,9 +29,8 @@ export default function ExecutorPanel() {
 
   // Estimate gas for rebalance
   const { data: gasEstimate } = useEstimateGas({
-    address: SHADOW_ALM_ADDRESS,
-    abi: SHADOW_ALM_ABI,
-    functionName: 'rebalance',
+    to: SHADOW_ALM_ADDRESS,
+    data: '0x7d7c2a1c', // rebalance() function selector
     account: address,
   })
 
