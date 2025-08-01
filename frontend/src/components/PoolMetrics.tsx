@@ -83,8 +83,8 @@ export default function PoolMetrics() {
       // For demonstration, using mock prices
       // In production, you would call a price API like CoinGecko or CoinMarketCap
       const mockPrices: TokenPrices = {
-        [token0Address.toLowerCase()]: 1.0, // Assume token0 is a stablecoin
-        [token1Address.toLowerCase()]: 3500.0, // Assume token1 is like ETH
+        [token0Address.toLowerCase()]: 1.0, // USDC price
+        [token1Address.toLowerCase()]: 1.0, // scUSD price (also a stablecoin)
       };
 
       setTokenPrices(mockPrices);
