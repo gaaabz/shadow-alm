@@ -1,7 +1,7 @@
 import React from "react";
 import { useReadContract, useWriteContract, useWaitForTransactionReceipt } from "wagmi";
 import { SHADOW_ALM_ADDRESS } from "../config/wagmi";
-import { parseEther, formatEther } from "viem";
+import { formatEther } from "viem";
 
 // ABI for the new V2 contract with emissions
 const SHADOW_ALM_V2_ABI = [
