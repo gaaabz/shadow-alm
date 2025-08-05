@@ -20,7 +20,7 @@ deployments/
 artifacts/
 typechain/
 typechain-types/
-# Note: lib/ is NOT ignored as it contains dependencies
+lib/
 
 # Frontend
 frontend/dist/
