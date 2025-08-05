@@ -1,13 +1,8 @@
 {
-  "crons": [
+  "rewrites": [
     {
-      "path": "/api/cron/executor",
-      "schedule": "* * * * *"
+      "source": "/(.*)",
+      "destination": "/index.html"
     }
-  ],
-  "functions": {
-    "api/cron/executor.js": {
-      "maxDuration": 10
-    }
-  }
+  ]
 }
