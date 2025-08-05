@@ -16,9 +16,9 @@ export const config = createConfig({
   },
 })
 
-// Contract addresses - V2 with AccessControl and Emissions
-export const SHADOW_ALM_ADDRESS = '0xe7cb31770E000cfF84fBe656f168bA0040eAdF40' as const // ShadowALMV2 - With AccessControl & Emissions
-export const SHADOW_POOL_ADDRESS = '0xDFCDAD314b0b96AB8890391e3F0540278E3B80F7' as const // Compatible pool (fee 100)
+// Contract addresses - Read from environment variables
+export const SHADOW_ALM_ADDRESS = (import.meta.env.VITE_SHADOW_ALM_ADDRESS || '0x1Ca0c33100FF40e72d171302C1D0d7b952EC86A7') as `0x${string}`
+export const SHADOW_POOL_ADDRESS = (import.meta.env.VITE_SHADOW_POOL_ADDRESS || '0xDFCDAD314b0b96AB8890391e3F0540278E3B80F7') as `0x${string}`
 
 declare module 'wagmi' {
   interface Register {

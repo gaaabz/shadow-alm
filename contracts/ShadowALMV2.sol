@@ -143,10 +143,10 @@ contract ShadowALMV2 is ERC20, ReentrancyGuard, AccessControl, Pausable {
         
         (, int24 currentTick, , , , , ) = pool.slot0();
         
-        // SINGLE-TICK STRATEGY: Keep liquidity in exactly the active tick only
+        // CONCENTRATED STRATEGY: Keep liquidity in a very tight range around active tick
         int24 activeTick = (currentTick / tickSpacing) * tickSpacing;
-        int24 tickLower = activeTick;
-        int24 tickUpper = activeTick;
+        int24 tickLower = activeTick - tickSpacing;
+        int24 tickUpper = activeTick + tickSpacing;
         
         if (tickLower == currentTickLower && tickUpper == currentTickUpper && currentPositionId != 0) {
             return;
